@@ -1,24 +1,109 @@
 package com.sport.stream
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
+import android.content.Context
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.Button
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.viewinterop.AndroidView
+import androidx.media3.common.MediaItem
+import androidx.media3.exoplayer.ExoPlayer
+import androidx.media3.ui.PlayerView
 
 @Composable
-fun LiveScreen(){
-    Box (modifier = Modifier
-        .fillMaxSize(),
-        contentAlignment = Alignment.Center
-    ){
-        Text(
-            text = "Live Screen",
-            style = MaterialTheme.typography.headlineLarge
-        )
+fun HlsPlayer(
+    url: String,
+    modifier: Modifier = Modifier
+) {
+    val context = LocalContext.current
+    val exoPlayer = remember(url) {
+        ExoPlayer.Builder(context).build().apply {
+            val mediaItem = MediaItem.fromUri(url)
+            setMediaItem(mediaItem)
+            prepare()
+            playWhenReady = true
+        }
     }
+    AndroidView(
+        factory = {
+            PlayerView(it).apply {
+                player = exoPlayer
+                useController = true
+                layoutParams = android.view.ViewGroup.LayoutParams(
+                    android.view.ViewGroup.LayoutParams.MATCH_PARENT,
+                    android.view.ViewGroup.LayoutParams.MATCH_PARENT
+                )
+            }
+        },
+        modifier = modifier
+    )
+    DisposableEffect(Unit) {
+        onDispose {
+            exoPlayer.release()
+        }
+    }
+}
 
+@Composable
+fun LiveScreen() {
+    // Danh sách link server
+    val serverLinks = listOf(
+        "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8", // Server 2
+        "https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8", // Server 1
+        "https://moiptvhls-i.akamaihd.net/hls/live/652398/secure/master.m3u8", // Server 3
+        "https://cph-p2p-msl.akamaized.net/hls/live/2000341/test/master.m3u8" // Server 4
+    )
+    var selectedServer by remember { mutableStateOf(0) }
+    val currentUrl = serverLinks[selectedServer]
+
+    // Thông tin trận đấu
+    val club1 = "Brighton"
+    val score = "2-1"
+    val club2 = "Arsenal"
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+    ) {
+        // Player trên cùng, tỉ lệ 16:9
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .aspectRatio(16f / 9f)
+        ) {
+            HlsPlayer(url = currentUrl, modifier = Modifier.fillMaxSize())
+        }
+        Spacer(Modifier.height(16.dp))
+
+        // Danh sách chọn server
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceEvenly
+        ) {
+            for (i in serverLinks.indices) {
+                Button(
+                    onClick = { selectedServer = i },
+                    enabled = selectedServer != i
+                ) {
+                    Text("Server ${i + 1}")
+                }
+            }
+        }
+        Spacer(Modifier.height(20.dp))
+
+        // Tên CLB - tỉ số - Tên CLB 2
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center
+        ) {
+            Text(text = club1)
+            Spacer(Modifier.width(8.dp))
+            Text(text = score)
+            Spacer(Modifier.width(8.dp))
+            Text(text = club2)
+        }
+    }
 }
