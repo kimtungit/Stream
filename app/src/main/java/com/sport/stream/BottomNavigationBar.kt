@@ -1,6 +1,9 @@
 package com.sport.stream
 
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Create
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
@@ -15,8 +18,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 
 @Composable
@@ -29,25 +35,30 @@ fun BottomNavigationBar(
 
     val navigationItems = listOf(
         NavigationItem(
-            title = "Home",
-            icon = Icons.Default.Home,
+            title = "",
+            iconRes = R.drawable.ic_home,
             route = Screen.Home.rout
         ),
         NavigationItem(
-            title = "Live",
-            icon = Icons.Default.DateRange,
+            title = "",
+            iconRes = R.drawable.ic_live,
             route = Screen.Live.rout
         ),
         NavigationItem(
-            title = "Profile",
-            icon = Icons.Default.Person,
+            title = "",
+            iconRes = R.drawable.ic_bookmark,
+            route = Screen.Profile.rout
+        ),
+        NavigationItem(
+            title = "",
+            iconRes = R.drawable.ic_profile,
             route = Screen.Profile.rout
         ),
 
     )
 
     NavigationBar(
-        containerColor = Color.White
+        containerColor = Color(0xFF222232)
     ) {
         navigationItems.forEachIndexed { index, item ->
             NavigationBarItem(
@@ -57,7 +68,11 @@ fun BottomNavigationBar(
                     navController.navigate(item.route)
                 },
                 icon = {
-                    Icon(imageVector = item.icon, contentDescription = item.title)
+                    Image(
+                        painter = painterResource(id = item.iconRes),
+                        contentDescription = item.title,
+                        modifier = Modifier.size(28.dp)
+                    )
                 },
                 label = {
                     Text(
@@ -79,6 +94,6 @@ fun BottomNavigationBar(
 
 data class NavigationItem(
     val title: String,
-    val icon: ImageVector,
+    val iconRes: Int, // resource id cho ảnh
     val route: String
 )

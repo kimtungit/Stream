@@ -48,18 +48,18 @@ fun MainScreen() {
         modifier = Modifier
             .fillMaxSize(),
         topBar = {
-            TopAppBar(
-                title = {
-                    Text(
-                        text = when (currentRoute) {
-                            Screen.Home.rout -> "Trang chủ"
-                            Screen.Live.rout -> "Trực tiếp"
-                            Screen.Profile.rout -> "Hồ sơ"
-                            else -> ""
-                        }
-                    )
-                }
-            )
+//            TopAppBar(
+//                title = {
+//                    Text(
+//                        text = when (currentRoute) {
+//                            Screen.Home.rout -> "Trang chủ"
+//                            Screen.Live.rout -> "Trực tiếp"
+//                            Screen.Profile.rout -> "Hồ sơ"
+//                            else -> ""
+//                        }
+//                    )
+//                }
+//            )
         },
         bottomBar = {
             BottomNavigationBar(navController)
