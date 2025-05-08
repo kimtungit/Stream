@@ -1,6 +1,5 @@
 package com.sport.stream
 
-import android.R
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -34,7 +33,6 @@ import com.sport.stream.screen.home.compoment.ScoreBox
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.sport.stream.screen.home.model.HomeViewModel
 import com.sport.stream.ui.theme.TestAppTheme
-import com.sport.stream.screen.home.model.MatchInfo
 
 @Composable
 fun HomeScreen(
@@ -55,9 +53,12 @@ fun HomeScreen(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Icon(
-                painter = painterResource(id = R.drawable.ic_menu_sort_by_size),
+                painter = painterResource(id = R.drawable.menu_gird),
                 contentDescription = "Menu",
-                tint = Color.White
+                tint = Color.White,
+                modifier = Modifier
+                    .width(26.dp)
+                    .height(26.dp)
             )
             Text(
                 text = "Beesport",
@@ -66,9 +67,12 @@ fun HomeScreen(
                 fontWeight = FontWeight.Bold
             )
             Icon(
-                painter = painterResource(id = R.drawable.ic_menu_search),
+                painter = painterResource(id = R.drawable.ic_bell),
                 contentDescription = "Search",
-                tint = Color.White
+                tint = Color.White,
+                modifier = Modifier
+                    .width(26.dp)
+                    .height(26.dp)
             )
         }
         Spacer(modifier = Modifier.height(20.dp))
@@ -143,7 +147,7 @@ fun HomeScreen(
                 )
             }
             Icon(
-                painter = painterResource(id = R.drawable.btn_star_big_off),
+                painter = painterResource(id = R.drawable.ic_play),
                 contentDescription = "Bookmark",
                 tint = Color.White
             )

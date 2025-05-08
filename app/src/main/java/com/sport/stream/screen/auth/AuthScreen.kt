@@ -6,6 +6,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -22,14 +23,12 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -38,9 +37,18 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import android.R
+import com.sport.stream.R
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.compose.rememberNavController
+import com.sport.stream.HomeScreen
+import com.sport.stream.screen.home.model.AuthModel
+import com.sport.stream.screen.home.model.HomeViewModel
+import com.sport.stream.ui.theme.TestAppTheme
 
 @Composable
 fun AuthScreen(
@@ -63,7 +71,7 @@ fun AuthScreen(
     ) {
         // Background Image
         Image(
-            painter = painterResource(id = R.drawable.menu_frame), // Thay bằng ảnh nền của bạn
+            painter = painterResource(id = R.drawable.bg_sign), // Thay bằng ảnh nền của bạn
             contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier = Modifier
@@ -82,7 +90,7 @@ fun AuthScreen(
         ) {
             Spacer(modifier = Modifier.height(32.dp))
             Text(
-                text = "Welcome to\nLiveScore.",
+                text = "Welcome to\nBeeSport.",
                 color = Color.White,
                 fontWeight = FontWeight.Bold,
                 fontSize = 28.sp
@@ -101,15 +109,9 @@ fun AuthScreen(
             OutlinedTextField(
                 value = username,
                 onValueChange = { username = it },
-                placeholder = { Text("Charlie Westervelt", color = Color.Gray) },
+                placeholder = { Text("Enter username or email", color = Color.Gray) },
                 modifier = Modifier.fillMaxWidth(),
-                singleLine = true,
-                colors = TextFieldDefaults.outlinedTextFieldColor(
-                    containerColor = Color(0xFF23243A),
-                    focusedBorderColor = Color(0xFF9C7FFF),
-                    unfocusedBorderColor = Color(0xFF23243A),
-                    textColor = Color.White
-                )
+                singleLine = true
             )
             Spacer(modifier = Modifier.height(16.dp))
 
@@ -127,20 +129,14 @@ fun AuthScreen(
                     IconButton (onClick = { passwordVisible = !passwordVisible }) {
                         Icon(
                             painter = painterResource(
-                                if (passwordVisible) R.drawable.ic_menu_search
-                                else R.drawable.ic_lock_power_off
+                                if (passwordVisible) R.drawable.ic_back
+                                else R.drawable.ic_play
                             ),
                             contentDescription = null,
                             tint = Color.Gray
                         )
                     }
-                },
-                colors = TextFieldDefaults.outlinedTextFieldColors(
-                    containerColor = Color(0xFF23243A),
-                    focusedBorderColor = Color(0xFF9C7FFF),
-                    unfocusedBorderColor = Color(0xFF23243A),
-                    textColor = Color.White
-                )
+                }
             )
 
             Spacer(modifier = Modifier.height(8.dp))
@@ -173,17 +169,30 @@ fun AuthScreen(
             Spacer(modifier = Modifier.height(24.dp))
 
             // Sign In Button
-            Button (
-                onClick = onSignIn,
+            Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(48.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color.Transparent // Đặt màu nền trong suốt để dùng Box bọc gradient
-                ),
-                shape = RoundedCornerShape(8.dp)
+                    .height(48.dp)
+                    .background(
+                        brush = Brush.horizontalGradient(
+                            colors = listOf(Color(0xFF4568DC), Color(0xFFB06AB3)) // ví dụ gradient từ xanh dương sang xanh lá
+                        ),
+                        shape = RoundedCornerShape(8.dp)
+                    )
+                    .clip(RoundedCornerShape(8.dp))
             ) {
-                Text("SIGN IN", color = Color.White, fontWeight = FontWeight.Bold)
+                Button(
+                    onClick = onSignIn,
+                    modifier = Modifier
+                        .fillMaxSize(), // chiếm toàn bộ Box
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color.Transparent
+                    ),
+                    shape = RoundedCornerShape(8.dp),
+                    contentPadding = PaddingValues() // tránh padding thừa để gradient đẹp
+                ) {
+                    Text("SIGN IN", color = Color.White, fontWeight = FontWeight.Bold)
+                }
             }
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -208,7 +217,7 @@ fun AuthScreen(
                     shape = RoundedCornerShape(8.dp)
                 ) {
                     Icon(
-                        painter = painterResource(id = R.drawable.btn_plus),
+                        painter = painterResource(id = R.drawable.ic_facebook),
                         contentDescription = "Facebook",
                         tint = Color.White
                     )
@@ -223,9 +232,9 @@ fun AuthScreen(
                     shape = RoundedCornerShape(8.dp)
                 ) {
                     Icon(
-                        painter = painterResource(id = R.drawable.ic_delete),
+                        painter = painterResource(id = R.drawable.ic_google),
                         contentDescription = "Google",
-                        tint = Color.White
+                        tint = Color.Unspecified
                     )
                     Spacer(modifier = Modifier.width(8.dp))
                     Text("Google", color = Color.White)
@@ -247,5 +256,14 @@ fun AuthScreen(
                 )
             }
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun AuthPreview() {
+//    val navController = rememberNavController()
+    TestAppTheme {
+        AuthScreen()
     }
 }

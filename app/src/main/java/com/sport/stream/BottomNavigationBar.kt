@@ -24,10 +24,12 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.sport.stream.screen.home.model.AuthModel
 
 @Composable
 fun BottomNavigationBar(
-    navController: NavController
+    navController: NavController,
+    authModel: AuthModel
 ) {
     val selectedNavigationIndex = rememberSaveable {
         mutableIntStateOf(0)
@@ -52,8 +54,8 @@ fun BottomNavigationBar(
         NavigationItem(
             title = "",
             iconRes = R.drawable.ic_profile,
-            route = Screen.Profile.rout
-        ),
+            route = Screen.Auth.rout
+        )
 
     )
 

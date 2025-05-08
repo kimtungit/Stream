@@ -20,6 +20,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.sport.stream.R
 
 
 @Composable
@@ -59,8 +60,14 @@ fun MatchCard(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier.weight(1f)
         ) {
+
             Text(date, color = Color.LightGray, fontSize = 11.sp)
             Text(time, color = Color.LightGray, fontSize = 11.sp)
+            Image(
+                painter = painterResource(id = R.drawable.ic_pre),
+                contentDescription = "Logo $homeTeam",
+                modifier = Modifier.size(30.dp)
+            )
         }
 
         // Away team (tên + logo)

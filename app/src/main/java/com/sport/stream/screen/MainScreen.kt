@@ -22,7 +22,9 @@ import com.sport.stream.LiveScreen
 import com.sport.stream.ProfileScreen
 import com.sport.stream.Screen
 import com.sport.stream.TestDetailScreen
+import com.sport.stream.screen.auth.AuthScreen
 import com.sport.stream.screen.home.compoment.SeeAllScreen
+import com.sport.stream.screen.home.model.AuthModel
 import com.sport.stream.screen.home.model.HomeViewModel
 import com.sport.stream.ui.theme.TestAppTheme
 
@@ -37,6 +39,8 @@ fun MainScreen() {
     val currentRoute = navBackStackEntry?.destination?.route
 
     val homeModel: HomeViewModel = viewModel()
+
+    val authModel: AuthModel = viewModel()
 
     val playerRunning by remember(currentRoute) {
         derivedStateOf { currentRoute == Screen.Live.rout }
@@ -61,23 +65,24 @@ fun MainScreen() {
         },
         bottomBar = {
             if (!playerRunning){
-                BottomNavigationBar(navController)
+                BottomNavigationBar(navController,authModel)
             }
         }
     ) { innerPadding ->
 
         val graph =
             navController.createGraph(startDestination = Screen.Home.rout) {
+                //authscreen
+                composable(route = Screen.Auth.rout) {
+                    AuthScreen(onSignIn = {
+                        authModel.isLoggedIn = true
+                    })
+                }
+                // HomeScreem
                 composable(route = Screen.Home.rout) {
                     HomeScreen(navController,homeModel)
                 }
-                composable(route = Screen.Live.rout) {
-                    LiveScreen()
-                }
-                composable(route = Screen.Profile.rout) {
-                    ProfileScreen()
-                }
-
+                //Seeall match screen
                 composable(route = Screen.SeeAllMatch.rout) {
                     SeeAllScreen(matches = homeModel.hotMatches, onBack = {
                         navController.popBackStack()
@@ -87,8 +92,15 @@ fun MainScreen() {
                     })
                 }
 
-
-                // 👇 DetailScreen nhận tham số
+                //PlayerScreen
+                composable(route = Screen.Live.rout) {
+                    LiveScreen()
+                }
+                //Profile Screen
+                composable(route = Screen.Profile.rout) {
+                    ProfileScreen(model = authModel)
+                }
+                // 👇 Test Screen
                 composable(route = "detail/{itemIndex}") { backStackEntry ->
                     val itemIndex = backStackEntry.arguments?.getString("itemIndex")
                     TestDetailScreen(itemIndex)
