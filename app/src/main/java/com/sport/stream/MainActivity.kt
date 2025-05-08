@@ -6,6 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import com.sport.stream.ui.theme.TestAppTheme
 import com.sport.stream.screen.MainScreen
+import com.sport.stream.screen.auth.AuthScreen
 
 
 class MainActivity : ComponentActivity() {
@@ -14,7 +15,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             TestAppTheme {
-                MainScreen()
+                AuthScreen()
             }
         }
     }
