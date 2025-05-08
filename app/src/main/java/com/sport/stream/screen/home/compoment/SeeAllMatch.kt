@@ -40,7 +40,7 @@ fun SeeAllScreen(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(
-                painter = painterResource(id = R.drawable.ic_play), // icon back
+                painter = painterResource(id = R.drawable.ic_back), // icon back
                 contentDescription = "Back",
                 tint = Color.White,
                 modifier = Modifier

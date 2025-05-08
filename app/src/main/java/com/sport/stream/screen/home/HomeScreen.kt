@@ -89,7 +89,7 @@ fun HomeScreen(
             },
             onSeeAllClick = {
                 println("See all Hot Matches clicked")
-                // TODO: Xử lý sự kiện khi nhấn "See All"
+                navController.navigate(Screen.SeeAllMatch.rout)
             }
         )
 
@@ -106,7 +106,7 @@ fun HomeScreen(
             },
             onSeeAllClick = {
                 println("See all All Matches clicked")
-                // TODO: Xử lý sự kiện khi nhấn "See All"
+                navController.navigate(Screen.SeeAllMatch.rout)
             }
         )
 

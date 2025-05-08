@@ -4,4 +4,5 @@ sealed class Screen(val rout: String) {
     object Home: Screen("home_screen")
     object Live: Screen("live_screen")
     object Profile: Screen("profile_screen")
+    object SeeAllMatch: Screen("see_all_match_screen")
 }

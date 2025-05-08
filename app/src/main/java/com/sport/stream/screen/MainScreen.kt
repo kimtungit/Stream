@@ -5,7 +5,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -20,6 +22,7 @@ import com.sport.stream.LiveScreen
 import com.sport.stream.ProfileScreen
 import com.sport.stream.Screen
 import com.sport.stream.TestDetailScreen
+import com.sport.stream.screen.home.compoment.SeeAllScreen
 import com.sport.stream.screen.home.model.HomeViewModel
 import com.sport.stream.ui.theme.TestAppTheme
 
@@ -35,6 +38,9 @@ fun MainScreen() {
 
     val homeModel: HomeViewModel = viewModel()
 
+    val playerRunning by remember(currentRoute) {
+        derivedStateOf { currentRoute == Screen.Live.rout }
+    }
 
     Scaffold(
         modifier = Modifier
@@ -54,14 +60,16 @@ fun MainScreen() {
 //            )
         },
         bottomBar = {
-            BottomNavigationBar(navController)
+            if (!playerRunning){
+                BottomNavigationBar(navController)
+            }
         }
     ) { innerPadding ->
 
         val graph =
             navController.createGraph(startDestination = Screen.Home.rout) {
                 composable(route = Screen.Home.rout) {
-                    HomeScreen(navController)
+                    HomeScreen(navController,homeModel)
                 }
                 composable(route = Screen.Live.rout) {
                     LiveScreen()
@@ -69,6 +77,16 @@ fun MainScreen() {
                 composable(route = Screen.Profile.rout) {
                     ProfileScreen()
                 }
+
+                composable(route = Screen.SeeAllMatch.rout) {
+                    SeeAllScreen(matches = homeModel.hotMatches, onBack = {
+                        navController.popBackStack()
+                    },  onMatchClick = { match ->
+                        println("Clicked match on All Screen: ${match.homeTeam} vs ${match.awayTeam}")
+                        navController.navigate(Screen.Live.rout)
+                    })
+                }
+
 
                 // 👇 DetailScreen nhận tham số
                 composable(route = "detail/{itemIndex}") { backStackEntry ->
