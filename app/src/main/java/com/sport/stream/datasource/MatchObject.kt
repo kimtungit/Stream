@@ -1,4 +1,4 @@
-package com.sport.stream.Datasource
+package com.sport.stream.datasource
 
 data class MatchObject(
     val time: String,
